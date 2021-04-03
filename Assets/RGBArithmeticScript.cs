@@ -420,6 +420,7 @@ public class RGBArithmeticScript : MonoBehaviour
                         {
                             yield return null;
                             sels[j].OnInteract();
+                            yield return new WaitForSeconds(0.01f);
                         }
                     indices[0]++;
                 }
@@ -427,9 +428,32 @@ public class RGBArithmeticScript : MonoBehaviour
                 {
                     yield return null;
                     cells[g[indices[1]]].OnInteract();
+                    yield return new WaitForSeconds(0.01f);
                     indices[1]++;
                 }
             }
+        }
+    }
+    private IEnumerator TwitchHandleForcedSolve()
+    {
+        while (!moduleSolved)
+        {
+            while (!gridinteract) yield return true;
+            for (int i = 0; i < 16; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    while (input[j] != results[j][i])
+                    {
+                        sels[j].OnInteract();
+                        yield return new WaitForSeconds(0.01f);
+                    }
+                }
+                cells[i].OnInteract();
+                yield return new WaitForSeconds(0.01f);
+            }
+            submit[0].OnInteract();
+            yield return null;
         }
     }
 }
